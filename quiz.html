@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interactif - Jeu JavaScript</title>
+    <link rel="stylesheet" href="quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Écran de démarrage -->
+        <div id="startScreen" class="screen active">
+            <header class="quiz-header">
+                <h1><i class="fas fa-question-circle"></i> Quiz Informaticien</h1>
+                <p class="subtitle">Testez vos connaissances en programmation !</p>
+            </header>
+
+            <div class="quiz-intro">
+                <div class="intro-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Thème : L'informatique</h3>
+                    <p>10 questions sur les bases de l'informatique</p>
+                </div>
+                <div class="intro-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Durée : 5 minutes</h3>
+                    <p>1 minute par question en moyenne</p>
+                </div>
+                <div class="intro-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Système de points</h3>
+                    <p>+10 points par bonne réponse</p>
+                </div>
+            </div>
+
+            <div class="category-selection">
+                <h3><i class="fas fa-filter"></i> Choisissez une catégorie</h3>
+                <div class="categories">
+                    <button class="category-btn active" data-category="javascript">
+                        <i class="fab fa-js-square"></i> JavaScript
+                    </button>
+                    <button class="category-btn" data-category="html">
+                        <i class="fab fa-html5"></i> HTML
+                    </button>
+                    <button class="category-btn" data-category="css">
+                        <i class="fab fa-css3-alt"></i> CSS
+                    </button>
+                    <button class="category-btn" data-category="web">
+                        <i class="fas fa-globe"></i> Web Général
+                    </button>
+                </div>
+            </div>
+
+            <div class="difficulty-selection">
+                <h3><i class="fas fa-chart-line"></i> Niveau de difficulté</h3>
+                <div class="difficulties">
+                    <button class="difficulty-btn active" data-difficulty="easy">
+                        <i class="fas fa-seedling"></i> Facile
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="medium">
+                        <i class="fas fa-tree"></i> Intermédiaire
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="hard">
+                        <i class="fas fa-mountain"></i> Difficile
+                    </button>
+                </div>
+            </div>
+
+            <div class="start-controls">
+                <button id="startBtn" class="btn-start">
+                    <i class="fas fa-play"></i> Commencer le quiz
+                </button>
+                <a href="../" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Retour aux jeux
+                </a>
+            </div>
+        </div>
+
+        <!-- Écran du quiz -->
+        <div id="quizScreen" class="screen">
+            <div class="quiz-header-bar">
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        Question <span id="currentQuestion">1</span> sur <span id="totalQuestions">10</span>
+                    </div>
+                </div>
+
+                <div class="quiz-stats">
+                    <div class="stat">
+                        <i class="fas fa-clock"></i>
+                        <span>Temps : <span id="timer">05:00</span></span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-star"></i>
+                        <span>Score : <span id="score">0</span> points</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-fire"></i>
+                        <span>Série : <span id="streak">0</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-header">
+                    <span class="question-category" id="questionCategory">JavaScript</span>
+                    <span class="question-difficulty easy" id="questionDifficulty">Facile</span>
+                </div>
+                
+                <h2 class="question-text" id="questionText">Quel est le résultat de l'expression typeof null en JavaScript ?</h2>
+                
+                <div class="question-hint" id="questionHint">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Astuce : Pensez à la façon dont JavaScript traite les valeurs null</span>
+                </div>
+
+                <div class="options-container" id="optionsContainer">
+                    <!-- Les options seront générées dynamiquement -->
+                </div>
+
+                <div class="quiz-controls">
+                    <button id="hintBtn" class="btn-hint">
+                        <i class="fas fa-lightbulb"></i> Voir l'indice
+                    </button>
+                    <button id="skipBtn" class="btn-skip">
+                        <i class="fas fa-forward"></i> Passer
+                    </button>
+                    <button id="nextBtn" class="btn-next" disabled>
+                        <i class="fas fa-arrow-right"></i> Question suivante
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-footer">
+                <div class="lifelines">
+                    <button id="fiftyFiftyBtn" class="lifeline-btn">
+                        <i class="fas fa-adjust"></i> 50/50
+                        <span class="lifeline-count">1</span>
+                    </button>
+                    <button id="extraTimeBtn" class="lifeline-btn">
+                        <i class="fas fa-plus-circle"></i> +30s
+                        <span class="lifeline-count">1</span>
+                    </button>
+                    <button id="skipQuestionBtn" class="lifeline-btn">
+                        <i class="fas fa-forward"></i> Passer
+                        <span class="lifeline-count">1</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran des résultats -->
+        <div id="resultsScreen" class="screen">
+            <div class="results-header">
+                <h1><i class="fas fa-trophy"></i> Résultats du Quiz</h1>
+                <p class="results-subtitle" id="resultsSubtitle">Catégorie : </p>
+            </div>
+
+            <div class="results-stats">
+                <div class="result-stat">
+                    <div class="stat-value" id="finalScore">0</div>
+                    <div class="stat-label">Score final</div>
+                </div>
+                <div class="result-stat">
+                    <div class="stat-value" id="correctAnswers">0/10</div>
+                    <div class="stat-label">Réponses correctes</div>
+                </div>
+                <div class="result-stat">
+                    <div class="stat-value" id="timeSpent">00:00</div>
+                    <div class="stat-label">Temps total</div>
+                </div>
+                <div class="result-stat">
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">Précision</div>
+                </div>
+            </div>
+
+            <div class="results-details">
+                <h3><i class="fas fa-chart-bar"></i> Détails par catégorie</h3>
+                <div class="category-breakdown" id="categoryBreakdown">
+                    <!-- Les statistiques par catégorie seront générées ici -->
+                </div>
+            </div>
+
+            <div class="results-review">
+                <h3><i class="fas fa-list-check"></i> Revue des questions</h3>
+                <div class="review-list" id="reviewList">
+                    <!-- La liste des questions avec réponses sera générée ici -->
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button id="restartBtn" class="btn-primary">
+                    <i class="fas fa-redo"></i> Recommencer
+                </button>
+                <button id="changeSettingsBtn" class="btn-secondary">
+                    <i class="fas fa-cog"></i> Changer les paramètres
+                </button>
+                <button id="shareResultsBtn" class="btn-secondary">
+                    <i class="fas fa-share-alt"></i> Partager
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="quiz.js"></script>
+</body>
+</html>
